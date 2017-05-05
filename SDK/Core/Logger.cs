@@ -30,6 +30,7 @@ namespace Teflon.SDK.Core
                         Double.TryParse(e.VariableValue, out value);
                         MDCSDeviceSetup.AddNumericVariable(e.VariableName,value.ToString(FloatFormatString));
                         break;
+                    case VariableCategory.FailCode:
                     case VariableCategory.String:
                         {
                             if (e.VariableName == "Key")
@@ -47,6 +48,13 @@ namespace Teflon.SDK.Core
                     double value;
                     Double.TryParse(e.VariableValue, out value);
                     LocalLogger.AddVariable(e.VariableName, value.ToString(FloatFormatString));
+                }
+                else if(e.Category==VariableCategory.FailCode)
+                {
+                    int value;
+                    int.TryParse(e.VariableValue, out value);
+                    string msg = FailCodeToMessage.GetErrorMessage(value);
+                    LocalLogger.AddVariable(e.VariableName, msg);
                 }
                 else
                 {

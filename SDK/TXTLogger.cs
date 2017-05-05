@@ -9,10 +9,11 @@ namespace Teflon.SDK
 {
     public class TXTLogger:ILocalLogger
     {
-        private  Dictionary<string, string> buffer = new Dictionary<string, string>();
+        private Dictionary<string, string> buffer;
         private  string oneLine;
         private  string header;
-        private  List<string> variableNames = new List<string>();
+        private List<string> variableNames;
+        private string[] pure_names_;
         private void AddHeader(string log_path)
         {
             int length = variableNames.Count;
@@ -33,12 +34,13 @@ namespace Teflon.SDK
                 sw.WriteLine(header);
             }
         }
-        private void UpdateHeader(string log_path)
+        private bool UpdateHeader(string log_path)
         {
             if (!File.Exists(log_path))
             {
                 File.CreateText(log_path).Close();
                 AddHeader(log_path);
+                return false;
             }
             else
             {
@@ -46,33 +48,58 @@ namespace Teflon.SDK
                 if (content.Length == 0)
                 {
                     AddHeader(log_path);
+                    return false;
                 }
                 else
                 {
-                    string[] names = content[0].Split(new char[] { ','});
-                    if(names.Length!=variableNames.Count)
+                    string[] names = content[0].Split(new char[] { ',' });
+                    var pure_names = from name in names
+                                     select name.Trim();
+                    pure_names_ = pure_names.ToArray();
+                    var not_in_pure_names = from v_name in variableNames
+                                            where pure_names.Contains(v_name)==false
+                                            select v_name;
+                    if(not_in_pure_names.Count()!=0)
                     {
                         File.Delete(log_path);
                         AddHeader(log_path);
+                        return false;
                     }
                     else
                     {
-                        int i;
-                        for(i=0;i!=names.Length;++i)
+                        var not_in_vnames = from name in pure_names
+                                            where variableNames.Contains(name) == false
+                                            select name;
+                        if(not_in_vnames.Count()!=0)
                         {
-                            if (!names[i].Trim().Equals(variableNames[i]))
-                                break;
-                        }
-                        if(i!=names.Length)
-                        {
-                            File.Delete(log_path);
-                            AddHeader(log_path);
+                            foreach(var lack_name in not_in_vnames)
+                            {
+                                AddVariable(lack_name, string.Empty);
+                            }
+                            return true;
                         }
                     }
+                    return false;
                 }
             }
         }
-        public int FixedWidth { get; set; } = 12;
+        private void InsertDateTime()
+        {
+            const string name = "DateTime";
+            if(!variableNames.Contains(name))
+                variableNames.Insert(0, name);
+            if (!buffer.Keys.Contains(name))
+                buffer.Add(name, DateTime.Now.ToString());
+            else
+                buffer[name] = DateTime.Now.ToString();
+        }
+        public TXTLogger()
+        {
+            buffer = new Dictionary<string, string>();
+            variableNames = new List<string>();
+            InsertDateTime();
+        }
+        public int FixedWidth { get; set; } = 17;
         public  void AddVariable(string var_name,string value_string)
         {
             variableNames.Add(var_name);
@@ -80,11 +107,12 @@ namespace Teflon.SDK
         }
         public void Log(string log_path)
         {
-            UpdateHeader(log_path);
+            InsertDateTime();
+            bool updated = UpdateHeader(log_path);
             int length = variableNames.Count;
             for (int i = 0; i != length; ++i)
             {
-                string name = variableNames[i];
+                string name = updated? pure_names_[i]:variableNames[i];
                 string value = buffer[name];
                 if (i == length - 1)
                 {
@@ -102,6 +130,7 @@ namespace Teflon.SDK
             oneLine = string.Empty;
             variableNames.Clear();
             buffer.Clear();
+            InsertDateTime();
         }
     }
 }

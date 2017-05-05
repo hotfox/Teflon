@@ -1,0 +1,23 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:Juwen_PCBA"
+                    xmlns:s="clr-namespace:System;assembly=mscorlib">
+    <s:String x:Key="File">File</s:String>
+    <s:String x:Key="About">About</s:String>
+    <s:String x:Key="OpenLog">Open Log</s:String>
+    <s:String x:Key="OpenReport">Open Report</s:String>
+    <s:String x:Key="Instructions">Instructions</s:String>
+    <s:String x:Key="MDCSProduction">MDCS Production</s:String>
+    <s:String x:Key="MDCSTest">MDCS Test</s:String>
+    <s:String x:Key="View">View</s:String>
+    <s:String x:Key="ViewDebug">View Debug</s:String>
+    <s:String x:Key="Choice">Choice</s:String>
+    <s:String x:Key="Start">Start</s:String>
+    <s:String x:Key="Stop">Stop</s:String>
+    <s:String x:Key="PCBA">PCBA</s:String>
+    <s:String x:Key="Language">Language</s:String>
+    <s:String x:Key="English">English</s:String>
+    <s:String x:Key="Chinese">Chinese</s:String>
+    <s:String x:Key="Title">232PCBA Test</s:String>
+    <s:String x:Key="RNR">RNR</s:String>
+</ResourceDictionary>

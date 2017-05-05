@@ -1,0 +1,79 @@
+﻿<UserControl x:Class="Teflon.ConfigurationView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Teflon"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300">
+    <UserControl.Resources>
+        <Style x:Key="GroupBoxStyle" TargetType="GroupBox">
+            <Setter Property="Foreground" Value="OldLace">
+            </Setter>
+            <Setter Property="FontFamily" Value="Lucida Sans">
+            </Setter>
+            <Setter Property="FontSize" Value="12">
+            </Setter>
+        </Style>
+        <Style x:Key="LabelStyle" TargetType="Label">
+            <Setter Property="Background" Value="BlanchedAlmond"/>
+            <Setter Property="Foreground" Value="Black"/>
+            <Setter Property="FontFamily" Value="Microsoft Sans Serif"/>
+            <Setter Property="FontSize" Value="12"/>
+        </Style>
+        <Style x:Key="RadioButtonStyle" TargetType="RadioButton">
+            <Setter Property="Foreground" Value="OldLace"/>
+            <Setter Property="FontFamily" Value="Lucida Sans"/>
+            <Setter Property="FontSize" Value="9.75"/>
+            <Setter Property="MinHeight" Value="20"/>
+        </Style>
+        <Style x:Key="CheckBoxStyle" TargetType="CheckBox">
+            <Setter Property="Foreground" Value="OldLace"/>
+            <Setter Property="FontFamily" Value="Lucida Sans"/>
+            <Setter Property="FontSize" Value="9.75"/>
+            <Setter Property="MinHeight" Value="20"/>
+        </Style>
+        <Style x:Key="ButtonStyle" TargetType="Button">
+            <Setter Property="FontFamily" Value="Lucida Sans"/>
+            <Setter Property="FontSize" Value="12"/>
+        </Style>
+        <Style x:Key="ListBoxItemStyle" TargetType="ListBoxItem">
+            <Style.Resources>
+                <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}"
+                             Color="Transparent"/>
+                <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}"
+                             Color="Transparent"/>
+            </Style.Resources>
+        </Style>
+    </UserControl.Resources>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="1*"/>
+        </Grid.ColumnDefinitions>
+        <ListBox x:Name="ListBox1" ItemsSource="{Binding Products,Mode=TwoWay}" SelectedItem="{Binding SelectedProduct,Mode=TwoWay}" 
+                 SelectionMode="Single" Background="DarkSlateGray" ItemContainerStyle="{StaticResource ListBoxItemStyle}">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Horizontal">
+                        <RadioButton Style="{StaticResource RadioButtonStyle}" Content="{Binding Name}"
+                                      IsChecked="{Binding Path=IsSelected,Mode=TwoWay,RelativeSource={RelativeSource AncestorType={x:Type ListBoxItem}}}">
+                        </RadioButton>
+                    </StackPanel>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+        <ListBox Grid.Column="1" DataContext="{Binding SelectedItem,ElementName=ListBox1}" ItemsSource="{Binding TestItems}"
+                 SelectionMode="Multiple" Background="DarkSlateGray" ItemContainerStyle="{StaticResource ListBoxItemStyle}">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Horizontal">
+                        <CheckBox Style="{StaticResource CheckBoxStyle}" Content="{Binding Name}"
+                                      IsChecked="{Binding Checked,Mode=TwoWay}">
+                        </CheckBox>
+                    </StackPanel>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+    </Grid>
+</UserControl>

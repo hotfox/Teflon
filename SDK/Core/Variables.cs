@@ -6,7 +6,7 @@ using MDCS;
 
 namespace Teflon.SDK.Core
 {
-    public enum VariableCategory { String,Numeric,Float}
+    public enum VariableCategory { String,Numeric,Float,FailCode}
     public class VariableNameAssginedEventArgs:EventArgs
     {
         public string VariableName { get; set; }
@@ -187,6 +187,31 @@ namespace Teflon.SDK.Core
         public override string ToString()
         {
             return value_;
+        }
+    }
+
+    public class FailCodeVariable:Variable
+    {
+        protected int value_;
+        protected FailCodeVariable() : base() { }
+        protected override void OnVariableNameAssginedEvent(VariableNameAssginedEventArgs e)
+        {
+            e.VariableName = Name;
+            e.VariableValue = this.ToString();
+            e.Category = VariableCategory.FailCode;
+            base.OnVariableNameAssginedEvent(e);
+        }
+        public static implicit operator FailCodeVariable(int failcode)
+        {
+            FailCodeVariable v = new FailCodeVariable();
+            v.value_ = failcode;
+            v.VariableNameAssginedEvent += Logger.OnVariableNameAssginedEvent;
+            return v;
+        }
+
+        public override string ToString()
+        {
+            return value_.ToString();
         }
     }
 }
