@@ -209,6 +209,10 @@ namespace Teflon.SDK.Core
             return v;
         }
 
+        public static implicit operator Int32(FailCodeVariable v)
+        {
+            return v.value_;
+        }
         public override string ToString()
         {
             return value_.ToString();

@@ -13,13 +13,13 @@ namespace TestSDK
     {
         static void Main(string[] args)
         {
-             var mdcsDevice = new MDCS.MDCSDeviceSetup("Savanna2_BLT", "http://hsm-mdcsws-ch3u.honeywell.com/MDCSWebService/MDCSService.asmx");
-            Logger.MDCSDeviceSetup = mdcsDevice;
+            //var mdcsDevice = new MDCS.MDCSDeviceSetup("Savanna2_BLT", "http://hsm-mdcsws-ch3u.honeywell.com/MDCSWebService/MDCSService.asmx");
+            //Logger.MDCSDeviceSetup = mdcsDevice;
+            Logger.LocalLogger = new TXTLogger();
             for (int i = 0; i != 2; ++i)
             {
-                Logger.LocalLogger = new TXTLogger();
-                FailCodeVariable v = 5418;
-                v.Name = "Failcode";
+              //  FailCodeVariable v = 5418;
+               // v.Name = "Failcode";
 
                 BoolVariable b = false;
                 b.Name = "False";

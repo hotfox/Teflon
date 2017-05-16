@@ -10,8 +10,19 @@ namespace Teflon.SDK
 {
     public static class ni
     {
+        private static string RefactorDevName(string dev_name)
+        {
+            if(dev_name=="Dev1")
+            {
+                if (!string.IsNullOrEmpty(DevName))
+                    return DevName;
+            }
+            return dev_name;
+        }
+        public static string DevName { get; set; }
         public static double ReadVoltage(string port_num,int count=50,int milliseconds=500,string dev_name="Dev1", AITerminalConfiguration configuration = AITerminalConfiguration.Rse)
         {
+            dev_name = RefactorDevName(dev_name);
             Task task = new Task();
             task.AIChannels.CreateVoltageChannel(string.Format("{0}/{1}",dev_name,port_num), "", configuration, -10, 10, AIVoltageUnits.Volts);
             AnalogSingleChannelReader reader = new AnalogSingleChannelReader(task.Stream);
@@ -25,6 +36,7 @@ namespace Teflon.SDK
         }
         public static void WriteVoltage(string port_num, double value,int milliseconds = 500, string dev_name = "Dev1")
         {
+            dev_name = RefactorDevName(dev_name);
             Task task = new Task();
             task.AOChannels.CreateVoltageChannel(string.Format("{0}/{1}",dev_name,port_num), "", -10, 10, AOVoltageUnits.Volts);
             AnalogSingleChannelWriter writer = new AnalogSingleChannelWriter(task.Stream);
@@ -36,6 +48,7 @@ namespace Teflon.SDK
         }
         public static void WriteDO(string port_num,bool value,int milliseconds=500,string dev_name="Dev1")
         {
+            dev_name = RefactorDevName(dev_name);
             Task task = new Task();
             string port = port_num.Split(new char[] { '.' })[0];
             string line = port_num.Split(new char[] { '.' })[1];
@@ -49,6 +62,7 @@ namespace Teflon.SDK
         }
         public static bool ReadDI(string port_num,int milliseconds=500, string dev_name="Dev1")
         {
+            dev_name = RefactorDevName(dev_name);
             Task task = new Task();
             string port = port_num.Split(new char[] { '.' })[0];
             string line = port_num.Split(new char[] { '.' })[1];
@@ -63,6 +77,7 @@ namespace Teflon.SDK
         }
         public static Tuple<CounterSingleChannelReader,IAsyncResult> BeginReadFrequency(string port_num,double measurement_time=1,int divisor=4,string dev_name="Dev1")
         {
+            dev_name = RefactorDevName(dev_name);
             Task task = new Task();
             task.CIChannels.CreateFrequencyChannel(string.Format("{0}/{1}", dev_name, port_num), "", 1.19, 10000000,
                 CIFrequencyStartingEdge.Rising, CIFrequencyMeasurementMethod.LowFrequencyOneCounter, measurement_time, divisor, CIFrequencyUnits.Hertz);
