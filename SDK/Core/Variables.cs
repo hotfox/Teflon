@@ -40,6 +40,10 @@ namespace Teflon.SDK.Core
                 OnVariableNameAssginedEvent(new VariableNameAssginedEventArgs());
             }
         }
+        public virtual string ToString(string format)
+        {
+            return this.ToString();
+        }
     }
     public class DoubleVariable:Variable
     {
@@ -66,6 +70,10 @@ namespace Teflon.SDK.Core
         public override string ToString()
         {
             return value_.ToString();
+        }
+        public override string ToString(string format)
+        {
+            return value_.ToString(format);
         }
     }
     public class IntVariable : Variable
@@ -141,6 +149,10 @@ namespace Teflon.SDK.Core
             v.VariableNameAssginedEvent += Logger.OnVariableNameAssginedEvent;
             return v;
         }
+        public override string ToString(string format)
+        {
+            return value_.ToString(format) + "V";
+        }
     }
     public class CurrentVariable : DoubleVariable
     {
@@ -159,6 +171,10 @@ namespace Teflon.SDK.Core
             v.value_ = value;
             v.VariableNameAssginedEvent += Logger.OnVariableNameAssginedEvent;
             return v;
+        }
+        public override string ToString(string format)
+        {
+            return value_.ToString(format) + "A";
         }
     }
 
