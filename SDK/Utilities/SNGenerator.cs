@@ -5,7 +5,7 @@ using System.Text;
 using System.IO;
 using System.Diagnostics;
 
-namespace Teflon.SDK
+namespace Teflon.SDK.Utilities
 {
     public interface IGenerateSN
     {

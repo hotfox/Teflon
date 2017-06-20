@@ -6,7 +6,7 @@ using NationalInstruments.DAQmx;
 using System.Threading;
 using System.Diagnostics;
 
-namespace Teflon.SDK
+namespace Teflon.SDK.Utilities
 {
     public static class ni
     {
@@ -75,23 +75,16 @@ namespace Teflon.SDK
             task.Stop();
             return res;
         }
-        public static Tuple<CounterSingleChannelReader,IAsyncResult> BeginReadFrequency(string port_num,double measurement_time=1,int divisor=4,string dev_name="Dev1")
+        public static async System.Threading.Tasks.Task<Double> ReadFrequencyAsync(string port_num, double measurement_time = 1, int divisor = 4, string dev_name = "Dev1")
         {
             dev_name = RefactorDevName(dev_name);
-            Task task = new Task();
-            task.CIChannels.CreateFrequencyChannel(string.Format("{0}/{1}", dev_name, port_num), "", 1.19, 10000000,
-                CIFrequencyStartingEdge.Rising, CIFrequencyMeasurementMethod.LowFrequencyOneCounter, measurement_time, divisor, CIFrequencyUnits.Hertz);
-            CounterSingleChannelReader reader = new CounterSingleChannelReader(task.Stream);
-            IAsyncResult ar =  reader.BeginReadSingleSampleDouble(null, null);
-            return  Tuple.Create(reader, ar);
-        }
-        public static double EndReadFrequency(Tuple<CounterSingleChannelReader, IAsyncResult> tuple)
-        {
-            while(!tuple.Item2.IsCompleted)
+            using (Task task = new Task())
             {
-
+                task.CIChannels.CreateFrequencyChannel(string.Format("{0}/{1}", dev_name, port_num), "", 1.19, 10000000,
+                    CIFrequencyStartingEdge.Rising, CIFrequencyMeasurementMethod.LowFrequencyOneCounter, measurement_time, divisor, CIFrequencyUnits.Hertz);
+                CounterSingleChannelReader reader = new CounterSingleChannelReader(task.Stream);
+                return await System.Threading.Tasks.Task.Run(() => { return reader.ReadSingleSampleDouble(); });
             }
-            return tuple.Item1.EndReadSingleSampleDouble(tuple.Item2);
         }
         public static void Reset()
         {

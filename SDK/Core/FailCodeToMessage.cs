@@ -2,11 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Teflon.SDK.Core;
 using System.IO;
 using System.Diagnostics;
 
-namespace Teflon.SDK
+namespace Teflon.SDK.Core
 {
     public delegate string CustomConvert(int failcode);
     public static class FailCodeToMessage

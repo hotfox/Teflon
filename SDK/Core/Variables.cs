@@ -6,6 +6,15 @@ using MDCS;
 
 namespace Teflon.SDK.Core
 {
+    public interface ITrackEqualAssert<T>
+    {
+        void TrackEuqalAssert(Variable v,T target);
+    }
+    public interface ITrackInRangeAssert<T>
+    {
+        void TrackInRangeAssert(Variable v,T min,T max);
+    }
+
     public enum VariableCategory { String,Numeric,Float,FailCode}
     public class VariableNameAssginedEventArgs:EventArgs
     {
@@ -34,7 +43,7 @@ namespace Teflon.SDK.Core
             {
                 if(!string.IsNullOrWhiteSpace(name_))
                 {
-                    throw new ArgumentException(string.Format("Name property has value:{0}",name_), value);
+                    throw new DuplicateVariableException(string.Format("Name property has value:{0}",name_));
                 }
                 name_ = value;
                 OnVariableNameAssginedEvent(new VariableNameAssginedEventArgs());
@@ -75,6 +84,15 @@ namespace Teflon.SDK.Core
         {
             return value_.ToString(format);
         }
+        public virtual void AssertInRange(double min,double max,int less_than_error_code,int larger_than_error_code, ITrackInRangeAssert<double> tracker=null)
+        {
+            if (tracker != null)
+                tracker.TrackInRangeAssert(this, min, max);
+            if (value_ < min)
+                throw new TeflonSpecificationException(this,less_than_error_code);
+            if (value_ >= max)
+                throw new TeflonSpecificationException(this,larger_than_error_code);
+        }
     }
     public class IntVariable : Variable
     {
@@ -102,6 +120,13 @@ namespace Teflon.SDK.Core
         {
             return value_.ToString();
         }
+        public virtual void AssertEqual(int target,int error_code,ITrackEqualAssert<int> tracker)
+        {
+            if (tracker != null)
+                tracker.TrackEuqalAssert(this, target);
+            if (value_ != target)
+                throw new TeflonSpecificationException(this,error_code);
+        }
     }
     public class BoolVariable : Variable
     {
@@ -128,6 +153,13 @@ namespace Teflon.SDK.Core
         public override string ToString()
         {
             return value_ ? "High" : "Low";
+        }
+        public virtual void AssertEqual(bool target, int error_code, ITrackEqualAssert<bool> tracker)
+        {
+            if (tracker != null)
+                tracker.TrackEuqalAssert(this, target);
+            if (value_ != target)
+                throw new TeflonSpecificationException(this,error_code);
         }
     }
 

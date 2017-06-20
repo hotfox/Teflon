@@ -5,7 +5,7 @@ using System.Text;
 using System.IO;
 using Teflon.SDK.Core;
 
-namespace Teflon.SDK
+namespace Teflon.SDK.Utilities
 {
     public class TXTLogger:ILocalLogger
     {

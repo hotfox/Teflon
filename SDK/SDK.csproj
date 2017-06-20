@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Teflon.SDK</RootNamespace>
     <AssemblyName>Teflon.SDK</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
   </PropertyGroup>
@@ -54,14 +54,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="FailCodeToMessage.cs" />
+    <Compile Include="Core\TeflonExceptions.cs" />
+    <Compile Include="Core\FailCodeToMessage.cs" />
     <Compile Include="Core\Logger.cs" />
-    <Compile Include="ni.cs" />
+    <Compile Include="Utilities\ni.cs" />
     <Compile Include="Core\Variables.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SNGenerator.cs" />
-    <Compile Include="TXTLogger.cs" />
+    <Compile Include="Extensions\SerialPortExtensions.cs" />
+    <Compile Include="Utilities\SNGenerator.cs" />
+    <Compile Include="Utilities\TXTLogger.cs" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
