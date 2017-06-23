@@ -5,6 +5,7 @@ using System.Text;
 using NationalInstruments.DAQmx;
 using System.Threading;
 using System.Diagnostics;
+using Teflon.SDK.Core;
 
 namespace Teflon.SDK.Utilities
 {
@@ -22,6 +23,8 @@ namespace Teflon.SDK.Utilities
         public static string DevName { get; set; }
         public static double ReadVoltage(string port_num,int count=50,int milliseconds=500,string dev_name="Dev1", AITerminalConfiguration configuration = AITerminalConfiguration.Rse)
         {
+            if (RuntimeConfiguration.Mode.HasFlag(RuntimeMode.VirtualNI))
+                return 0;
             dev_name = RefactorDevName(dev_name);
             Task task = new Task();
             task.AIChannels.CreateVoltageChannel(string.Format("{0}/{1}",dev_name,port_num), "", configuration, -10, 10, AIVoltageUnits.Volts);
@@ -36,6 +39,8 @@ namespace Teflon.SDK.Utilities
         }
         public static void WriteVoltage(string port_num, double value,int milliseconds = 500, string dev_name = "Dev1")
         {
+            if (RuntimeConfiguration.Mode.HasFlag(RuntimeMode.VirtualNI))
+                return;
             dev_name = RefactorDevName(dev_name);
             Task task = new Task();
             task.AOChannels.CreateVoltageChannel(string.Format("{0}/{1}",dev_name,port_num), "", -10, 10, AOVoltageUnits.Volts);
@@ -48,6 +53,8 @@ namespace Teflon.SDK.Utilities
         }
         public static void WriteDO(string port_num,bool value,int milliseconds=500,string dev_name="Dev1")
         {
+            if (RuntimeConfiguration.Mode.HasFlag(RuntimeMode.VirtualNI))
+                return ;
             dev_name = RefactorDevName(dev_name);
             Task task = new Task();
             string port = port_num.Split(new char[] { '.' })[0];
@@ -62,6 +69,8 @@ namespace Teflon.SDK.Utilities
         }
         public static bool ReadDI(string port_num,int milliseconds=500, string dev_name="Dev1")
         {
+            if (RuntimeConfiguration.Mode.HasFlag(RuntimeMode.VirtualNI))
+                return false;
             dev_name = RefactorDevName(dev_name);
             Task task = new Task();
             string port = port_num.Split(new char[] { '.' })[0];
@@ -75,8 +84,11 @@ namespace Teflon.SDK.Utilities
             task.Stop();
             return res;
         }
+#if(!NET4)
         public static async System.Threading.Tasks.Task<Double> ReadFrequencyAsync(string port_num, double measurement_time = 1, int divisor = 4, string dev_name = "Dev1")
         {
+            if (RuntimeConfiguration.Mode.HasFlag(RuntimeMode.VirtualNI))
+                return 0;
             dev_name = RefactorDevName(dev_name);
             using (Task task = new Task())
             {
@@ -86,8 +98,11 @@ namespace Teflon.SDK.Utilities
                 return await System.Threading.Tasks.Task.Run(() => { return reader.ReadSingleSampleDouble(); });
             }
         }
+#endif
         public static void Reset()
         {
+            if (RuntimeConfiguration.Mode.HasFlag(RuntimeMode.VirtualNI))
+                return ;
             var devices = from deviceName in DaqSystem.Local.Devices
                           select DaqSystem.Local.LoadDevice(deviceName);
             foreach (var device in devices)
@@ -97,6 +112,8 @@ namespace Teflon.SDK.Utilities
         }
         public static void Reset(string dev_name)
         {
+            if (RuntimeConfiguration.Mode.HasFlag(RuntimeMode.VirtualNI))
+                return ;
             var devices = DaqSystem.Local.Devices;
             if (devices.Contains(dev_name))
             {

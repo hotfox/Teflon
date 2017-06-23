@@ -10,6 +10,7 @@ namespace Teflon.SDK.Core
     {
         void AddVariable(string var_name, string value_string);
         void Log(string log_path);
+        void PrintAllVariables(string path);
     }
     public static class Logger
     {

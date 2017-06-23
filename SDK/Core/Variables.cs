@@ -88,10 +88,16 @@ namespace Teflon.SDK.Core
         {
             if (tracker != null)
                 tracker.TrackInRangeAssert(this, min, max);
+            if (RuntimeConfiguration.Mode.HasFlag(RuntimeMode.SkipAssert))
+                return;
             if (value_ < min)
                 throw new TeflonSpecificationException(this,less_than_error_code);
             if (value_ >= max)
                 throw new TeflonSpecificationException(this,larger_than_error_code);
+        }
+        public virtual void AssertInRange(double min,double max,int error_code,ITrackInRangeAssert<double> tracker=null)
+        {
+            AssertInRange(min, max, error_code, error_code,tracker);
         }
     }
     public class IntVariable : Variable
@@ -124,6 +130,8 @@ namespace Teflon.SDK.Core
         {
             if (tracker != null)
                 tracker.TrackEuqalAssert(this, target);
+            if (RuntimeConfiguration.Mode.HasFlag(RuntimeMode.SkipAssert))
+                return;
             if (value_ != target)
                 throw new TeflonSpecificationException(this,error_code);
         }
@@ -158,6 +166,8 @@ namespace Teflon.SDK.Core
         {
             if (tracker != null)
                 tracker.TrackEuqalAssert(this, target);
+            if (RuntimeConfiguration.Mode.HasFlag(RuntimeMode.SkipAssert))
+                return;
             if (value_ != target)
                 throw new TeflonSpecificationException(this,error_code);
         }

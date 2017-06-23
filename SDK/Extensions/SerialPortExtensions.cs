@@ -9,20 +9,33 @@ namespace Teflon.SDK.Extensions
 {
     public static class SerialPortExtensions
     {
-        public static string SendAndWaitResponse(this SerialPort serial_port,string text,int read_timeout=0)
+        public static string WriteAndReadUntilACK(this SerialPort serial_port,string text,int read_timeout=0,bool throw_exception=true)
         {
             serial_port.DiscardInBuffer();
-            if (read_timeout > 0)
-                serial_port.ReadTimeout = read_timeout;
             serial_port.Write(text);
-            int c = serial_port.ReadChar();
-            string s = string.Empty;
-            while (c != 6)
+            return ReadUntilACK(serial_port, read_timeout,throw_exception);
+        }
+        public static string ReadUntilACK(this SerialPort serial_port,int read_timeout=0,bool throw_exception=true)
+        {
+            try
             {
-                s += (char)c;
-                c = serial_port.ReadChar();
+                if (read_timeout > 0)
+                    serial_port.ReadTimeout = read_timeout;
+                int c = serial_port.ReadChar();
+                string s = string.Empty;
+                while (c != 6)
+                {
+                    s += (char)c;
+                    c = serial_port.ReadChar();
+                }
+                return s;
             }
-            return s;
+            catch(TimeoutException e)
+            {
+                if (!throw_exception)
+                    return string.Empty;
+                throw e;
+            }
         }
     }
 }

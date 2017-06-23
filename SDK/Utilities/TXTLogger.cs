@@ -132,5 +132,9 @@ namespace Teflon.SDK.Utilities
             buffer.Clear();
             InsertDateTime();
         }
+        void ILocalLogger.PrintAllVariables(string path)
+        {
+            File.WriteAllLines(path, variableNames.ToArray());
+        }
     }
 }
