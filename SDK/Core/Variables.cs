@@ -15,10 +15,10 @@ namespace Teflon.SDK.Core
         void TrackInRangeAssert(Variable v,T min,T max);
     }
 
-    public enum VariableCategory { String,Numeric,Float,Failcode}
+    public enum MDCSVariableCategory { String,Numeric,Failcode}
     public class VariableNameAssginedEventArgs:EventArgs
     {
-        public VariableCategory Category { get; set; }
+        public MDCSVariableCategory Category { get; set; }
     }
     public delegate void VaribaleNameAssginedEventHandler(object sender, VariableNameAssginedEventArgs e);
     public abstract class Variable
@@ -45,26 +45,19 @@ namespace Teflon.SDK.Core
                 OnVariableNameAssginedEvent(new VariableNameAssginedEventArgs());
             }
         }
+        public virtual string Unit { get; set; } = string.Empty;
         public virtual string ToString(string format)
         {
-            return this.ToString();
+            return ToString();
         }
     }
-    public abstract class UnitVariable:Variable
-    {
-        public virtual string Unit { get; set; } = string.Empty;
-        public override string ToString(string format)
-        {
-            return ToString() + Unit;
-        }
-    }
-    public class DoubleVariable: UnitVariable
+    public class DoubleVariable: Variable
     {
         protected double value_;
         protected DoubleVariable() : base() { }
         protected override void OnVariableNameAssginedEvent(VariableNameAssginedEventArgs e)
         {
-            e.Category = VariableCategory.Float;
+            e.Category = MDCSVariableCategory.Numeric;
             base.OnVariableNameAssginedEvent(e);
         }
         public static implicit operator Double(DoubleVariable v)
@@ -80,11 +73,11 @@ namespace Teflon.SDK.Core
         }
         public override string ToString()
         {
-            return value_.ToString() + Unit;
+            return value_.ToString();
         }
         public override string ToString(string format)
         {
-            return value_.ToString(format) + Unit;
+            return value_.ToString(format);
         }
         public virtual void AssertInRange(double min,double max,int less_than_error_code,int larger_than_error_code, ITrackInRangeAssert<double> tracker=null)
         {
@@ -108,7 +101,7 @@ namespace Teflon.SDK.Core
         protected IntVariable() : base() { }
         protected override void OnVariableNameAssginedEvent(VariableNameAssginedEventArgs e)
         {
-            e.Category = VariableCategory.Numeric;
+            e.Category = MDCSVariableCategory.Numeric;
             base.OnVariableNameAssginedEvent(e);
         }
         public static implicit operator Int32(IntVariable v)
@@ -142,7 +135,7 @@ namespace Teflon.SDK.Core
         protected BoolVariable() : base() { }
         protected override void OnVariableNameAssginedEvent(VariableNameAssginedEventArgs e)
         {
-            e.Category = VariableCategory.String;
+            e.Category = MDCSVariableCategory.String;
             base.OnVariableNameAssginedEvent(e);
         }
         public static implicit operator Boolean(BoolVariable v)
@@ -208,7 +201,7 @@ namespace Teflon.SDK.Core
         protected StringVaiable() : base() { }
         protected override void OnVariableNameAssginedEvent(VariableNameAssginedEventArgs e)
         {
-            e.Category = VariableCategory.String;
+            e.Category = MDCSVariableCategory.String;
             base.OnVariableNameAssginedEvent(e);
         }
         public static implicit operator String(StringVaiable v)
@@ -234,7 +227,7 @@ namespace Teflon.SDK.Core
         protected FailcodeVariable() : base() { }
         protected override void OnVariableNameAssginedEvent(VariableNameAssginedEventArgs e)
         {
-            e.Category = VariableCategory.Failcode;
+            e.Category = MDCSVariableCategory.Failcode;
             base.OnVariableNameAssginedEvent(e);
         }
         public static implicit operator FailcodeVariable(int failcode)

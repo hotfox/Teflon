@@ -25,15 +25,11 @@ namespace Teflon.SDK.Core
             {
                 switch (e.Category)
                 {
-                    case VariableCategory.Numeric:
-                        MDCSDeviceSetup.AddNumericVariable(v.Name, v.ToString());
+                    case MDCSVariableCategory.Numeric:
+                        MDCSDeviceSetup.AddNumericVariable(v.Name,v.ToString(FloatFormatString));
                         break;
-                    case VariableCategory.Float:
-                        double value = (DoubleVariable)v;
-                        MDCSDeviceSetup.AddNumericVariable(v.Name,value.ToString(FloatFormatString));
-                        break;
-                    case VariableCategory.Failcode:
-                    case VariableCategory.String:
+                    case MDCSVariableCategory.Failcode:
+                    case MDCSVariableCategory.String:
                         {
                             if (v.Name == "Key")
                                 MDCSDeviceSetup.Key = v.ToString();
@@ -45,11 +41,11 @@ namespace Teflon.SDK.Core
             }
             if(LocalLogger!=null)
             {
-                if (e.Category == VariableCategory.Float)
+                if (e.Category == MDCSVariableCategory.Numeric)
                 {
                     LocalLogger.AddVariable(v.Name,v.ToString(FloatFormatString));
                 }
-                else if(e.Category==VariableCategory.Failcode)
+                else if(e.Category==MDCSVariableCategory.Failcode)
                 {
                     int value = (FailcodeVariable)v;
                     string msg = FailCodeToMessage.GetErrorMessage(value);
@@ -66,6 +62,7 @@ namespace Teflon.SDK.Core
             bool r1 = true;
             if (LocalLogger != null)
             {
+                LocalLogger.PrintAllVariables("variables.txt");
                 LocalLogger.Log(log_path);
             }
             if (MDCSDeviceSetup!=null)
