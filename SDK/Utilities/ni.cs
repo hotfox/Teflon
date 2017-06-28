@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using NationalInstruments.DAQmx;
 using System.Threading;
-using System.Diagnostics;
 using Teflon.SDK.Core;
 
 namespace Teflon.SDK.Utilities

@@ -15,20 +15,16 @@ namespace Teflon.SDK.Core
         void TrackInRangeAssert(Variable v,T min,T max);
     }
 
-    public enum VariableCategory { String,Numeric,Float,FailCode}
+    public enum VariableCategory { String,Numeric,Float,Failcode}
     public class VariableNameAssginedEventArgs:EventArgs
     {
-        public string VariableName { get; set; }
-        public string VariableValue { get; set; }
-        public string VariableUnit { get; set; }
         public VariableCategory Category { get; set; }
-
     }
     public delegate void VaribaleNameAssginedEventHandler(object sender, VariableNameAssginedEventArgs e);
     public abstract class Variable
     {
         private string name_;
-        protected  virtual void OnVariableNameAssginedEvent(VariableNameAssginedEventArgs e)
+        protected virtual void OnVariableNameAssginedEvent(VariableNameAssginedEventArgs e)
         {
             VariableNameAssginedEvent(this, e);
         }
@@ -41,9 +37,9 @@ namespace Teflon.SDK.Core
             }
             set
             {
-                if(!string.IsNullOrWhiteSpace(name_))
+                if (!string.IsNullOrWhiteSpace(name_))
                 {
-                    throw new DuplicateVariableException(string.Format("Name property has value:{0}",name_));
+                    throw new DuplicateVariableException(string.Format("Name property has value:{0}", name_));
                 }
                 name_ = value;
                 OnVariableNameAssginedEvent(new VariableNameAssginedEventArgs());
@@ -54,14 +50,20 @@ namespace Teflon.SDK.Core
             return this.ToString();
         }
     }
-    public class DoubleVariable:Variable
+    public abstract class UnitVariable:Variable
+    {
+        public virtual string Unit { get; set; } = string.Empty;
+        public override string ToString(string format)
+        {
+            return ToString() + Unit;
+        }
+    }
+    public class DoubleVariable: UnitVariable
     {
         protected double value_;
         protected DoubleVariable() : base() { }
         protected override void OnVariableNameAssginedEvent(VariableNameAssginedEventArgs e)
         {
-            e.VariableName = Name;
-            e.VariableValue = this.ToString();
             e.Category = VariableCategory.Float;
             base.OnVariableNameAssginedEvent(e);
         }
@@ -78,11 +80,11 @@ namespace Teflon.SDK.Core
         }
         public override string ToString()
         {
-            return value_.ToString();
+            return value_.ToString() + Unit;
         }
         public override string ToString(string format)
         {
-            return value_.ToString(format);
+            return value_.ToString(format) + Unit;
         }
         public virtual void AssertInRange(double min,double max,int less_than_error_code,int larger_than_error_code, ITrackInRangeAssert<double> tracker=null)
         {
@@ -92,7 +94,7 @@ namespace Teflon.SDK.Core
                 return;
             if (value_ < min)
                 throw new TeflonSpecificationException(this,less_than_error_code);
-            if (value_ >= max)
+            if (value_ > max)
                 throw new TeflonSpecificationException(this,larger_than_error_code);
         }
         public virtual void AssertInRange(double min,double max,int error_code,ITrackInRangeAssert<double> tracker=null)
@@ -106,8 +108,6 @@ namespace Teflon.SDK.Core
         protected IntVariable() : base() { }
         protected override void OnVariableNameAssginedEvent(VariableNameAssginedEventArgs e)
         {
-            e.VariableName = Name;
-            e.VariableValue = this.ToString();
             e.Category = VariableCategory.Numeric;
             base.OnVariableNameAssginedEvent(e);
         }
@@ -142,8 +142,6 @@ namespace Teflon.SDK.Core
         protected BoolVariable() : base() { }
         protected override void OnVariableNameAssginedEvent(VariableNameAssginedEventArgs e)
         {
-            e.VariableName = Name;
-            e.VariableValue = this.ToString();
             e.Category = VariableCategory.String;
             base.OnVariableNameAssginedEvent(e);
         }
@@ -175,11 +173,6 @@ namespace Teflon.SDK.Core
 
     public class VoltageVariable:DoubleVariable
     {
-        protected override void OnVariableNameAssginedEvent(VariableNameAssginedEventArgs e)
-        {
-            e.VariableUnit = "V";
-            base.OnVariableNameAssginedEvent(e);
-        }
         public static implicit operator Double(VoltageVariable v)
         {
             return v.value_;
@@ -188,21 +181,13 @@ namespace Teflon.SDK.Core
         {
             VoltageVariable v = new VoltageVariable();
             v.value_ = value;
+            v.Unit = "V";
             v.VariableNameAssginedEvent += Logger.OnVariableNameAssginedEvent;
             return v;
-        }
-        public override string ToString(string format)
-        {
-            return value_.ToString(format) + "V";
         }
     }
     public class CurrentVariable : DoubleVariable
     {
-        protected override void OnVariableNameAssginedEvent(VariableNameAssginedEventArgs e)
-        {
-            e.VariableUnit = "A";
-            base.OnVariableNameAssginedEvent(e);
-        }
         public static implicit operator Double(CurrentVariable v)
         {
             return v.value_;
@@ -211,12 +196,9 @@ namespace Teflon.SDK.Core
         {
             CurrentVariable v = new CurrentVariable();
             v.value_ = value;
+            v.Unit = "A";
             v.VariableNameAssginedEvent += Logger.OnVariableNameAssginedEvent;
             return v;
-        }
-        public override string ToString(string format)
-        {
-            return value_.ToString(format) + "A";
         }
     }
 
@@ -226,8 +208,6 @@ namespace Teflon.SDK.Core
         protected StringVaiable() : base() { }
         protected override void OnVariableNameAssginedEvent(VariableNameAssginedEventArgs e)
         {
-            e.VariableName = Name;
-            e.VariableValue = this.ToString();
             e.Category = VariableCategory.String;
             base.OnVariableNameAssginedEvent(e);
         }
@@ -248,26 +228,24 @@ namespace Teflon.SDK.Core
         }
     }
 
-    public class FailCodeVariable:Variable
+    public class FailcodeVariable:Variable
     {
         protected int value_;
-        protected FailCodeVariable() : base() { }
+        protected FailcodeVariable() : base() { }
         protected override void OnVariableNameAssginedEvent(VariableNameAssginedEventArgs e)
         {
-            e.VariableName = Name;
-            e.VariableValue = this.ToString();
-            e.Category = VariableCategory.FailCode;
+            e.Category = VariableCategory.Failcode;
             base.OnVariableNameAssginedEvent(e);
         }
-        public static implicit operator FailCodeVariable(int failcode)
+        public static implicit operator FailcodeVariable(int failcode)
         {
-            FailCodeVariable v = new FailCodeVariable();
+            FailcodeVariable v = new FailcodeVariable();
             v.value_ = failcode;
             v.VariableNameAssginedEvent += Logger.OnVariableNameAssginedEvent;
             return v;
         }
 
-        public static implicit operator Int32(FailCodeVariable v)
+        public static implicit operator Int32(FailcodeVariable v)
         {
             return v.value_;
         }

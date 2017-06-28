@@ -20,7 +20,6 @@ namespace Teflon.SDK.Core
                 string[] content = File.ReadAllLines("failcode.csv");
                 for(int i=1;i!=content.Length;++i)
                 {
-                    Debug.WriteLine(i);
                     string line = content[i];
                     string[] collection = line.Split(new char[] { ',' });
                     string code_string = collection[0].Trim('\"');

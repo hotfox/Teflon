@@ -15,12 +15,23 @@ namespace TestSDK
     {
         static void Main(string[] args)
         {
-            SerialPort rs232 = new SerialPort();
-            rs232 = new SerialPort("COM2", 115200, Parity.None, 8, StopBits.One);
-            rs232.Open();
-            rs232.ReadTimeout = 2000;
-
-            string r = rs232.WriteAndReadUntilACK("\x16y\rSERUUI?.");
+            Logger.LocalLogger = new TXTLogger();
+            IntVariable a = 1;
+            a.Name = "a";
+            DoubleVariable b = 2.2;
+            b.Unit = "db";
+            b.Name = "b";
+            CurrentVariable c = 3.3;
+            c.Name = "c";
+            VoltageVariable d = 4.4;
+            d.Name = "d";
+            BoolVariable e = true;
+            e.Name = "e";
+            StringVaiable f = "ffff";
+            f.Name = "f";
+            FailcodeVariable g = 0;
+            g.Name = "g";
+            Logger.Log();
         }
     }
 }

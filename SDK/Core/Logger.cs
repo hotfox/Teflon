@@ -19,25 +19,26 @@ namespace Teflon.SDK.Core
         public static string FloatFormatString { get; set; } = "F3";
         public static void OnVariableNameAssginedEvent(object sender,VariableNameAssginedEventArgs e)
         {
+            Variable v = sender as Variable;
+            if (v == null) return;
             if(MDCSDeviceSetup!=null)
             {
                 switch (e.Category)
                 {
                     case VariableCategory.Numeric:
-                        MDCSDeviceSetup.AddNumericVariable(e.VariableName, e.VariableValue);
+                        MDCSDeviceSetup.AddNumericVariable(v.Name, v.ToString());
                         break;
                     case VariableCategory.Float:
-                        double value;
-                        Double.TryParse(e.VariableValue, out value);
-                        MDCSDeviceSetup.AddNumericVariable(e.VariableName,value.ToString(FloatFormatString));
+                        double value = (DoubleVariable)v;
+                        MDCSDeviceSetup.AddNumericVariable(v.Name,value.ToString(FloatFormatString));
                         break;
-                    case VariableCategory.FailCode:
+                    case VariableCategory.Failcode:
                     case VariableCategory.String:
                         {
-                            if (e.VariableName == "Key")
-                                MDCSDeviceSetup.Key = e.VariableValue;
+                            if (v.Name == "Key")
+                                MDCSDeviceSetup.Key = v.ToString();
                             else
-                                MDCSDeviceSetup.AddStringVariable(e.VariableName, e.VariableValue);
+                                MDCSDeviceSetup.AddStringVariable(v.Name, v.ToString());
                         }
                         break;
                 }
@@ -46,20 +47,17 @@ namespace Teflon.SDK.Core
             {
                 if (e.Category == VariableCategory.Float)
                 {
-                    double value;
-                    Double.TryParse(e.VariableValue, out value);
-                    LocalLogger.AddVariable(e.VariableName, value.ToString(FloatFormatString));
+                    LocalLogger.AddVariable(v.Name,v.ToString(FloatFormatString));
                 }
-                else if(e.Category==VariableCategory.FailCode)
+                else if(e.Category==VariableCategory.Failcode)
                 {
-                    int value;
-                    int.TryParse(e.VariableValue, out value);
+                    int value = (FailcodeVariable)v;
                     string msg = FailCodeToMessage.GetErrorMessage(value);
-                    LocalLogger.AddVariable(e.VariableName, msg);
+                    LocalLogger.AddVariable(v.Name, msg);
                 }
                 else
                 {
-                    LocalLogger.AddVariable(e.VariableName, e.VariableValue);
+                    LocalLogger.AddVariable(v.Name, v.ToString());
                 }
             }
         }
