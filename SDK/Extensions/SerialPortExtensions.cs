@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO.Ports;
 using System.Diagnostics;
+using Teflon.SDK.Core;
 
 namespace Teflon.SDK.Extensions
 {
@@ -15,7 +16,16 @@ namespace Teflon.SDK.Extensions
             Debug.WriteLine(text);
             serial_port.DiscardInBuffer();
             serial_port.Write(text);
-            return ReadUntilACK(serial_port, read_timeout,throw_exception);
+            try
+            {
+                return ReadUntilACK(serial_port, read_timeout, throw_exception);
+            }
+            catch (TimeoutException e)
+            {
+                if (!throw_exception)
+                    return string.Empty;
+                throw new TeflonCommunicationException(text, 2050, "", e);
+            }
         }
         public static string ReadUntilACK(this SerialPort serial_port,int read_timeout=0,bool throw_exception=true)
         {
@@ -30,7 +40,6 @@ namespace Teflon.SDK.Extensions
                     s += (char)c;
                     c = serial_port.ReadChar();
                 }
-                Debug.WriteLine(s);
                 return s;
             }
             catch(TimeoutException e)

@@ -86,9 +86,9 @@ namespace Teflon.SDK.Core
             if (RuntimeConfiguration.Mode.HasFlag(RuntimeMode.SkipAssert))
                 return;
             if (value_ < min)
-                throw new TeflonSpecificationException(this,less_than_error_code);
+                throw new TeflonDoubleAssertFailException(this,min,max,less_than_error_code);
             if (value_ > max)
-                throw new TeflonSpecificationException(this,larger_than_error_code);
+                throw new TeflonDoubleAssertFailException(this,min,max,larger_than_error_code);
         }
         public virtual void AssertInRange(double min,double max,int error_code,ITrackInRangeAssert<double> tracker=null)
         {
@@ -126,7 +126,7 @@ namespace Teflon.SDK.Core
             if (RuntimeConfiguration.Mode.HasFlag(RuntimeMode.SkipAssert))
                 return;
             if (value_ != target)
-                throw new TeflonSpecificationException(this,error_code);
+                throw new TeflonIntAssertFailException(this,target,error_code);
         }
     }
     public class BoolVariable : Variable
@@ -160,7 +160,7 @@ namespace Teflon.SDK.Core
             if (RuntimeConfiguration.Mode.HasFlag(RuntimeMode.SkipAssert))
                 return;
             if (value_ != target)
-                throw new TeflonSpecificationException(this,error_code);
+                throw new TeflonBoolAssertFailException(this,target,error_code);
         }
     }
 
