@@ -6,6 +6,8 @@ using NationalInstruments.DAQmx;
 using System.Threading;
 using Teflon.SDK.Core;
 
+
+
 namespace Teflon.SDK.Utilities
 {
     public static class ni
@@ -20,7 +22,7 @@ namespace Teflon.SDK.Utilities
             return dev_name;
         }
         public static string DevName { get; set; }
-        public static double ReadVoltage(string port_num,int count=50,int milliseconds=500,string dev_name="Dev1", AITerminalConfiguration configuration = AITerminalConfiguration.Rse)
+        public static double ReadVoltage(string port_num,int count=50,int milliseconds=100,string dev_name="Dev1", AITerminalConfiguration configuration = AITerminalConfiguration.Rse)
         {
             if (RuntimeConfiguration.Mode.HasFlag(RuntimeMode.VirtualNI))
                 return 0;
@@ -36,7 +38,7 @@ namespace Teflon.SDK.Utilities
             task.Dispose();
             return sample;
         }
-        public static void WriteVoltage(string port_num, double value,int milliseconds = 500, string dev_name = "Dev1")
+        public static void WriteVoltage(string port_num, double value,int milliseconds = 100, string dev_name = "Dev1")
         {
             if (RuntimeConfiguration.Mode.HasFlag(RuntimeMode.VirtualNI))
                 return;
@@ -50,7 +52,7 @@ namespace Teflon.SDK.Utilities
             task.Stop();
             task.Dispose();
         }
-        public static void WriteDO(string port_num,bool value,int milliseconds=500,string dev_name="Dev1")
+        public static void WriteDO(string port_num,bool value,int milliseconds=100,string dev_name="Dev1")
         {
             if (RuntimeConfiguration.Mode.HasFlag(RuntimeMode.VirtualNI))
                 return ;
@@ -66,7 +68,7 @@ namespace Teflon.SDK.Utilities
             task.Stop();
             task.Dispose();
         }
-        public static bool ReadDI(string port_num,int milliseconds=500, string dev_name="Dev1")
+        public static bool ReadDI(string port_num,int milliseconds=100, string dev_name="Dev1")
         {
             if (RuntimeConfiguration.Mode.HasFlag(RuntimeMode.VirtualNI))
                 return false;

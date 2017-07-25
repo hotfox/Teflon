@@ -13,7 +13,7 @@ namespace TestSDK
 {
     class Program: ITrackInRangeAssert<double>
     {
-        int Main(string[] args)
+        static int Main(string[] args)
         {
             Logger.MDCSDeviceSetup = new MDCSDeviceSetup("TestPost", 
                 "http://hsm-mdcsws-ch3u.honeywell.com/MDCSWebService/MDCSService.asmx");
