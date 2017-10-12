@@ -85,21 +85,19 @@ namespace Teflon.SDK.Utilities
             task.Stop();
             return res;
         }
-#if(!NET4)
-        public static async System.Threading.Tasks.Task<Double> ReadFrequencyAsync(string port_num, double measurement_time = 1, int divisor = 4, string dev_name = "Dev1")
-        {
-            if (RuntimeConfiguration.Mode.HasFlag(RuntimeMode.VirtualNI))
-                return 0;
-            dev_name = RefactorDevName(dev_name);
-            using (Task task = new Task())
-            {
-                task.CIChannels.CreateFrequencyChannel(string.Format("{0}/{1}", dev_name, port_num), "", 1.19, 10000000,
-                    CIFrequencyStartingEdge.Rising, CIFrequencyMeasurementMethod.LowFrequencyOneCounter, measurement_time, divisor, CIFrequencyUnits.Hertz);
-                CounterSingleChannelReader reader = new CounterSingleChannelReader(task.Stream);
-                return await System.Threading.Tasks.Task.Run(() => { return reader.ReadSingleSampleDouble(); });
-            }
-        }
-#endif
+        //public static async System.Threading.Tasks.Task<Double> ReadFrequencyAsync(string port_num, double measurement_time = 1, int divisor = 4, string dev_name = "Dev1")
+        //{
+        //    if (RuntimeConfiguration.Mode.HasFlag(RuntimeMode.VirtualNI))
+        //        return 0;
+        //    dev_name = RefactorDevName(dev_name);
+        //    using (Task task = new Task())
+        //    {
+        //        task.CIChannels.CreateFrequencyChannel(string.Format("{0}/{1}", dev_name, port_num), "", 1.19, 10000000,
+        //            CIFrequencyStartingEdge.Rising, CIFrequencyMeasurementMethod.LowFrequencyOneCounter, measurement_time, divisor, CIFrequencyUnits.Hertz);
+        //        CounterSingleChannelReader reader = new CounterSingleChannelReader(task.Stream);
+        //        return await System.Threading.Tasks.Task.Run(() => { return reader.ReadSingleSampleDouble(); });
+        //    }
+        //}
         public static void Reset()
         {
             if (RuntimeConfiguration.Mode.HasFlag(RuntimeMode.VirtualNI))

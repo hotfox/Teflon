@@ -41,6 +41,9 @@ namespace TestSDK
             FailcodeVariable g = 0;
             g.Name = "failcode";
 
+            StringVaiable bt = "SR-GREEN-RED-USB";
+            bt.Name = "BoardType";
+
             Logger.Log();
             return 0;
         }

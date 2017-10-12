@@ -33,6 +33,8 @@ namespace Teflon.SDK.Core
                         {
                             if (v.Name == "Key")
                                 MDCSDeviceSetup.Key = v.ToString();
+                            else if (v.Name == "BoardType")
+                                MDCSDeviceSetup.ItemType = v.ToString();
                             else
                                 MDCSDeviceSetup.AddStringVariable(v.Name, v.ToString());
                         }
