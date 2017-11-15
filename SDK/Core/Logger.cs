@@ -59,7 +59,7 @@ namespace Teflon.SDK.Core
                 }
             }
         }
-        public static bool Log(string log_path="log.txt")
+        public static bool Log(string log_path="Data\\log.txt")
         {
             bool r1 = true;
             if (LocalLogger != null)
@@ -72,7 +72,7 @@ namespace Teflon.SDK.Core
                 r1 = MDCSDeviceSetup.SendMDCSTestRecord();
                 MDCSDeviceSetup.ClearAllVariables();
             }
-            return true;
+            return r1;
         }
     }
 }

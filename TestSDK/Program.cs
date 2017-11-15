@@ -15,35 +15,15 @@ namespace TestSDK
     {
         static int Main(string[] args)
         {
-            Logger.MDCSDeviceSetup = new MDCSDeviceSetup("TestPost", 
+            Logger.MDCSDeviceSetup = new MDCSDeviceSetup("AGV_Focus", 
                 "http://hsm-mdcsws-ch3u.honeywell.com/MDCSWebService/MDCSService.asmx");
             Logger.LocalLogger = new TXTLogger();
 
             //... operations to get variable
-            IntVariable a = 1;
-            a.Name = "a";
-
-            DoubleVariable b = 2.2;
-            b.Name = "b";
-
-            CurrentVariable c = 3.3;
-            c.Name = "c";
-
-            VoltageVariable d = 4.4;
-            d.Name = "d";
-
-            BoolVariable e = true;
-            e.Name = "e";
-
-            StringVaiable f = "ffff";
-            f.Name = "f";
-
-            FailcodeVariable g = 0;
-            g.Name = "failcode";
-
-            StringVaiable bt = "SR-GREEN-RED-USB";
-            bt.Name = "BoardType";
-
+            StringVaiable sn = "1111111111";
+            sn.Name = "SN";
+            FailcodeVariable fc = 0;
+            fc.Name = "failcode";
             Logger.Log();
             return 0;
         }

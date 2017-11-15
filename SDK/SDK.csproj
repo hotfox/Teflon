@@ -46,13 +46,13 @@
     <Reference Include="MDCS">
       <HintPath>dll\3.5\MDCS.dll</HintPath>
     </Reference>
-    <Reference Include="NationalInstruments.Common, Version=15.1.40.49152, Culture=neutral, PublicKeyToken=dc6ad606294fc298, processorArchitecture=MSIL">
+    <Reference Include="NationalInstruments.Common, Version=15.0.40.49154, Culture=neutral, PublicKeyToken=dc6ad606294fc298, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>dll\4.0\NationalInstruments.Common.dll</HintPath>
+      <HintPath>dll\NationalInstruments.Common.dll</HintPath>
     </Reference>
-    <Reference Include="NationalInstruments.DAQmx, Version=15.5.45.109, Culture=neutral, PublicKeyToken=4febd62461bf11a4, processorArchitecture=x86">
+    <Reference Include="NationalInstruments.DAQmx, Version=14.5.40.122, Culture=neutral, PublicKeyToken=dc6ad606294fc298, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>dll\4.0\NationalInstruments.DAQmx.dll</HintPath>
+      <HintPath>dll\NationalInstruments.DAQmx.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -63,10 +63,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Core\Context.cs" />
+    <Compile Include="Core\Product.cs" />
     <Compile Include="Core\RuntimeConfiguration.cs" />
     <Compile Include="Core\TeflonExceptions.cs" />
     <Compile Include="Core\FailCodeToMessage.cs" />
     <Compile Include="Core\Logger.cs" />
+    <Compile Include="Core\TestEngine.cs" />
+    <Compile Include="Utilities\Consts.cs" />
+    <Compile Include="Utilities\MCXParser.cs" />
     <Compile Include="Utilities\ni.cs" />
     <Compile Include="Core\Variables.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
