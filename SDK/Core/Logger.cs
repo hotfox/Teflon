@@ -21,6 +21,8 @@ namespace Teflon.SDK.Core
         {
             Variable v = sender as Variable;
             if (v == null) return;
+            if (v.Name.StartsWith("_"))
+                return;
             if(MDCSDeviceSetup!=null)
             {
                 switch (e.Category)
@@ -59,7 +61,7 @@ namespace Teflon.SDK.Core
                 }
             }
         }
-        public static bool Log(string log_path="Data\\log.txt")
+        public static bool Log(string log_path="log.txt")
         {
             bool r1 = true;
             if (LocalLogger != null)

@@ -11,7 +11,7 @@ namespace Teflon.SDK.Core
 
         public int ErrorCode { get; private set; }
 
-        public TestEngine(Context context)
+        public TestEngine(Context context=null)
         {
             Context = context;
         }

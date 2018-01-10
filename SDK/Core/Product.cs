@@ -16,28 +16,30 @@ namespace Teflon.SDK.Core
             Tests.Add(new KeyValuePair<string, TestDelegate>(name, test));
             return 0;
         }
-        public virtual int Run(Context context)
+        public virtual int Run(Context context=null)
         {
             Context = context;
             foreach(var pair in Tests)
             {
-                Context.DisplayMessage("Start " + pair.Key+"\r\n");
+                if(context!=null)
+                    Context.DisplayMessage("Start " + pair.Key+"\r\n");
                 int r = pair.Value.Invoke();
                 if (r != 0)
                     return r;
-                Context.DisplayMessage(pair.Key + " Fnished\r\n");
+                if(context!=null)
+                    Context.DisplayMessage(pair.Key + " Fnished\r\n");
             }
             return 0;
         }
 
         public void Dispose()
         {
-            Dispose(true);
+            this.Dispose(true);
             GC.SuppressFinalize(this);
         }
         protected virtual void Dispose(bool disposing)
         {
-
+            return;
         }
     }
 }
