@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 
@@ -28,6 +29,26 @@ namespace Teflon.SDK.Core
                     return r;
                 if(context!=null)
                     Context.DisplayMessage(pair.Key + " Fnished\r\n");
+            }
+            return 0;
+        }
+        public virtual int DebugRun(IEnumerable<string> names,Context context=null)
+        {
+            Context = context;
+            foreach (string name in names)
+            {
+                var value = from pair in Tests
+                            where pair.Key == name
+                            select pair.Value;
+                if (value.Count() == 0)
+                    continue;
+                if (context != null)
+                    Context.DisplayMessage("Start " + name + "\r\n");
+                int r = value.First().Invoke();
+                if (r != 0)
+                    return r;
+                if (context != null)
+                    Context.DisplayMessage(name + " Fnished\r\n");
             }
             return 0;
         }

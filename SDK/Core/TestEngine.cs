@@ -22,6 +22,7 @@ namespace Teflon.SDK.Core
             try
             {
                 ErrorCode = product.Run(Context);
+                SetErrorcode(ErrorCode);
             }
             catch (TeflonDoubleAssertFailException e)
             {
@@ -47,7 +48,42 @@ namespace Teflon.SDK.Core
             {
                 DoubleVariable time = (DateTime.Now - start).TotalSeconds;
                 time.Name = "TotalTestTime";
+                product.Dispose();
+            }
+        }
+        public virtual void DebugRun(Product product,IEnumerable<string>names)
+        {
+            DateTime start = DateTime.Now;
+            ErrorCode = 0;
+            try
+            {
+                ErrorCode = product.DebugRun(names,Context);
                 SetErrorcode(ErrorCode);
+            }
+            catch (TeflonDoubleAssertFailException e)
+            {
+                SetErrorcode(e.ErrorCode);
+            }
+            catch (TeflonBoolAssertFailException e)
+            {
+                SetErrorcode(e.ErrorCode);
+            }
+            catch (TeflonIntAssertFailException e)
+            {
+                SetErrorcode(e.ErrorCode);
+            }
+            catch (TeflonStringAssertFailException e)
+            {
+                SetErrorcode(e.ErrorCode);
+            }
+            catch (TeflonCommunicationException e)
+            {
+                SetErrorcode(e.ErrorCode);
+            }
+            finally
+            {
+                DoubleVariable time = (DateTime.Now - start).TotalSeconds;
+                time.Name = "TotalTestTime";
                 product.Dispose();
             }
         }
