@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Teflon.SDK.Core;
 
-namespace Teflon.SDK.Core
+namespace Teflon.SDK.Scanner
 {
     public class TestEngine
     {

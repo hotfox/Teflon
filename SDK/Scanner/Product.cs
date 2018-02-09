@@ -4,7 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 
-namespace Teflon.SDK.Core
+namespace Teflon.SDK.Scanner
 {
     public delegate int TestDelegate();
     public class Product:IDisposable
