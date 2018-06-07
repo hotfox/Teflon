@@ -17,6 +17,17 @@ namespace Teflon.SDK.Scanner
             Tests.Add(new KeyValuePair<string, TestDelegate>(name, test));
             return 0;
         }
+        public int RemoveTest(string name)
+        {
+            var l = from item in Tests
+                    where item.Key == name
+                    select item;
+            if(l.Count()!=0)
+            {
+                Tests.Remove(l.First());
+            }
+            return 0;
+        }
         public virtual int Run(Context context=null)
         {
             Context = context;
@@ -28,7 +39,7 @@ namespace Teflon.SDK.Scanner
                 if (r != 0)
                     return r;
                 if(context!=null)
-                    Context.DisplayMessage(pair.Key + " Fnished\r\n");
+                    Context.DisplayMessage(pair.Key + " Finished\r\n");
             }
             return 0;
         }
