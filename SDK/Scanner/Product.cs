@@ -10,6 +10,7 @@ namespace Teflon.SDK.Scanner
     public class Product:IDisposable
     {
         public Context Context { get; private set; }
+        public TestEngine Engine { get; set; }
         //不要直接使用这个属性添加测项，设为公共是为了兼容现有的测试代码
         public List<KeyValuePair<string, TestDelegate>> Tests = new List<KeyValuePair<string, TestDelegate>>();
         public int AppendTest(string name,TestDelegate test)

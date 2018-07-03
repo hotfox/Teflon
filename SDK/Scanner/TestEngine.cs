@@ -11,6 +11,7 @@ namespace Teflon.SDK.Scanner
         public Context Context { get; private set; }
 
         public int ErrorCode { get; private set; }
+        public string ExtraMessage { get; set; }
 
         public TestEngine(Context context=null)
         {
@@ -22,6 +23,7 @@ namespace Teflon.SDK.Scanner
             ErrorCode = 0;
             try
             {
+                product.Engine = this;
                 ErrorCode = product.Run(Context);
                 SetErrorcode(ErrorCode);
             }
